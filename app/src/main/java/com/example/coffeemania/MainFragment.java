@@ -1,6 +1,6 @@
 package com.example.coffeemania;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
@@ -13,12 +13,12 @@ import com.example.coffeemania.dummy.DummyContent;
  * A list fragment representing a list of Items. This fragment
  * also supports tablet devices by allowing list items to be given an
  * 'activated' state upon selection. This helps indicate which item is
- * currently being viewed in a {@link ItemDetailFragment}.
+ * currently being viewed in a {@link DetailFragment}.
  * <p/>
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class ItemListFragment extends ListFragment {
+public class MainFragment extends ListFragment {
 
     /**
      * The serialization (saved instance state) Bundle key representing the
@@ -63,7 +63,7 @@ public class ItemListFragment extends ListFragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ItemListFragment() {
+    public MainFragment() {
     }
 
     @Override
@@ -90,7 +90,7 @@ public class ItemListFragment extends ListFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context activity) {
         super.onAttach(activity);
 
         // Activities containing this fragment must implement its callbacks.

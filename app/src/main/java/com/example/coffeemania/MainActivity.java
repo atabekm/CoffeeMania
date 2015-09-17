@@ -22,8 +22,7 @@ import android.support.v7.app.AppCompatActivity;
  * {@link MainFragment.Callbacks} interface
  * to listen for item selections.
  */
-public class MainActivity extends AppCompatActivity
-        implements MainFragment.Callbacks {
+public class MainActivity extends AppCompatActivity implements MainFragment.Callbacks {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -58,13 +57,25 @@ public class MainActivity extends AppCompatActivity
      * indicating that the item with the given ID was selected.
      */
     @Override
-    public void onItemSelected(String id) {
+    public void onItemSelected(Coffeeshop c) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(DetailFragment.ARG_ITEM_ID, id);
+            arguments.putString(DetailFragment.COFFEESHOP_NAME, c.getName());
+            arguments.putString(DetailFragment.COFFEESHOP_LOCATION_LAT, c.getLat());
+            arguments.putString(DetailFragment.COFFEESHOP_LOCATION_LNG, c.getLng());
+            arguments.putInt(DetailFragment.COFFEESHOP_DISTANCE, c.getDistance());
+            arguments.putString(DetailFragment.COFFEESHOP_CITY, c.getCity());
+            arguments.putString(DetailFragment.COFFEESHOP_ADDRESS, c.getFormattedAddress());
+            arguments.putString(DetailFragment.COFFEESHOP_CATEGORY, c.getCategory());
+            arguments.putInt(DetailFragment.COFFEESHOP_CHECKINS, c.getCheckinsCount());
+            arguments.putInt(DetailFragment.COFFEESHOP_USERS, c.getUsersCount());
+            arguments.putInt(DetailFragment.COFFEESHOP_TIP, c.getTipCount());
+            arguments.putString(DetailFragment.COFFEESHOP_PHONE, c.getPhone());
+            arguments.putString(DetailFragment.COFFEESHOP_FORMATTED_PHONE, c.getFormattedPhone());
+
             DetailFragment fragment = new DetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -75,7 +86,18 @@ public class MainActivity extends AppCompatActivity
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
             Intent detailIntent = new Intent(this, DetailActivity.class);
-            detailIntent.putExtra(DetailFragment.ARG_ITEM_ID, id);
+            detailIntent.putExtra(DetailFragment.COFFEESHOP_NAME, c.getName());
+            detailIntent.putExtra(DetailFragment.COFFEESHOP_LOCATION_LAT, c.getLat());
+            detailIntent.putExtra(DetailFragment.COFFEESHOP_LOCATION_LNG, c.getLng());
+            detailIntent.putExtra(DetailFragment.COFFEESHOP_DISTANCE, c.getDistance());
+            detailIntent.putExtra(DetailFragment.COFFEESHOP_CITY, c.getCity());
+            detailIntent.putExtra(DetailFragment.COFFEESHOP_ADDRESS, c.getFormattedAddress());
+            detailIntent.putExtra(DetailFragment.COFFEESHOP_CATEGORY, c.getCategory());
+            detailIntent.putExtra(DetailFragment.COFFEESHOP_CHECKINS, c.getCheckinsCount());
+            detailIntent.putExtra(DetailFragment.COFFEESHOP_USERS, c.getUsersCount());
+            detailIntent.putExtra(DetailFragment.COFFEESHOP_TIP, c.getTipCount());
+            detailIntent.putExtra(DetailFragment.COFFEESHOP_PHONE, c.getPhone());
+            detailIntent.putExtra(DetailFragment.COFFEESHOP_FORMATTED_PHONE, c.getFormattedPhone());
             startActivity(detailIntent);
         }
     }

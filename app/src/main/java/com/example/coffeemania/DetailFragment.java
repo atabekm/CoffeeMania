@@ -7,8 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.coffeemania.dummy.DummyContent;
-
 /**
  * A fragment representing a single Item detail screen.
  * This fragment is either contained in a {@link MainActivity}
@@ -20,12 +18,31 @@ public class DetailFragment extends Fragment {
      * The fragment argument representing the item ID that this fragment
      * represents.
      */
-    public static final String ARG_ITEM_ID = "item_id";
+    public static final String COFFEESHOP_NAME = "coffeeshop_name";
+    public static final String COFFEESHOP_LOCATION_LAT = "coffeeshop_location_lat";
+    public static final String COFFEESHOP_LOCATION_LNG = "coffeeshop_location_lng";
+    public static final String COFFEESHOP_DISTANCE = "coffeeshop_distance";
+    public static final String COFFEESHOP_CITY = "coffeeshop_city";
+    public static final String COFFEESHOP_ADDRESS = "coffeeshop_address";
+    public static final String COFFEESHOP_CATEGORY = "coffeeshop_category";
+    public static final String COFFEESHOP_CHECKINS = "coffeeshop_checkins";
+    public static final String COFFEESHOP_USERS = "coffeeshop_users";
+    public static final String COFFEESHOP_TIP = "coffeeshop_tip";
+    public static final String COFFEESHOP_PHONE = "coffeeshop_phone";
+    public static final String COFFEESHOP_FORMATTED_PHONE = "coffeeshop_formatted_phone";
 
-    /**
-     * The dummy content this fragment is presenting.
-     */
-    private DummyContent.DummyItem mItem;
+    private String coffeeShopName;
+    private String coffeeShopLocationLat;
+    private String coffeeShopLocationLng;
+    private String coffeeShopDistance;
+    private String coffeeShopCity;
+    private String coffeeShopAddress;
+    private String coffeeShopCategory;
+    private int coffeeShopCheckins;
+    private int coffeeShopUsers;
+    private int coffeeShopTip;
+    private String coffeeShopPhone;
+    private String coffeeShopFormattedPhone;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -38,11 +55,19 @@ public class DetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+        if (getArguments().containsKey(COFFEESHOP_NAME)) {
+            coffeeShopName = getArguments().getString(COFFEESHOP_NAME);
+            coffeeShopLocationLat = getArguments().getString(COFFEESHOP_LOCATION_LAT);
+            coffeeShopLocationLng = getArguments().getString(COFFEESHOP_LOCATION_LNG);
+            coffeeShopDistance = getArguments().getString(COFFEESHOP_DISTANCE);
+            coffeeShopCity = getArguments().getString(COFFEESHOP_CITY);
+            coffeeShopAddress = getArguments().getString(COFFEESHOP_ADDRESS);
+            coffeeShopCategory = getArguments().getString(COFFEESHOP_CATEGORY);
+            coffeeShopCheckins = getArguments().getInt(COFFEESHOP_CHECKINS);
+            coffeeShopUsers = getArguments().getInt(COFFEESHOP_USERS);
+            coffeeShopTip = getArguments().getInt(COFFEESHOP_TIP);
+            coffeeShopPhone = getArguments().getString(COFFEESHOP_PHONE);
+            coffeeShopFormattedPhone = getArguments().getString(COFFEESHOP_FORMATTED_PHONE);
         }
     }
 
@@ -52,8 +77,16 @@ public class DetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
         // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.item_detail)).setText(mItem.content);
+        if (coffeeShopName != null) {
+            ((TextView) rootView.findViewById(R.id.detail_name)).setText(coffeeShopName);
+            ((TextView) rootView.findViewById(R.id.detail_category)).setText(coffeeShopCategory);
+            ((TextView) rootView.findViewById(R.id.detail_city)).setText(coffeeShopCity);
+            ((TextView) rootView.findViewById(R.id.detail_address)).setText(coffeeShopAddress);
+            ((TextView) rootView.findViewById(R.id.detail_checkins)).setText(String.valueOf(coffeeShopCheckins));
+            ((TextView) rootView.findViewById(R.id.detail_users)).setText(String.valueOf(coffeeShopUsers));
+            ((TextView) rootView.findViewById(R.id.detail_tip)).setText(String.valueOf(coffeeShopTip));
+            ((TextView) rootView.findViewById(R.id.detail_lat)).setText(coffeeShopLocationLat);
+            ((TextView) rootView.findViewById(R.id.detail_lng)).setText(coffeeShopLocationLng);
         }
 
         return rootView;

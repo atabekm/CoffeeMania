@@ -3,11 +3,23 @@ package com.example.coffeemania;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.example.coffeemania.dummy.DummyContent;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * A list fragment representing a list of Items. This fragment
@@ -32,10 +44,15 @@ public class MainFragment extends ListFragment {
      */
     private Callbacks mCallbacks = sDummyCallbacks;
 
-    /**
-     * The current activated item position. Only used on tablets.
-     */
+    // The current activated item position. Only used on tablets.
     private int mActivatedPosition = ListView.INVALID_POSITION;
+
+    // List of Coffeeshop items
+    private List<Coffeeshop> list;
+
+    private CoffeeshopAdapter adapter;
+
+    private final String URL = "https://api.foursquare.com/v2/venues/search?client_id=ACAO2JPKM1MXHQJCK45IIFKRFR2ZVL0QASMCBCG5NPJQWF2G&client_secret=YZCKUYJ1WHUV2QICBXUBEILZI1DMPUIDP5SHV043O04FKBHL&v=20140806&m=swarm&query=coffee&";
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -46,7 +63,7 @@ public class MainFragment extends ListFragment {
         /**
          * Callback for when an item has been selected.
          */
-        public void onItemSelected(String id);
+        public void onItemSelected(Coffeeshop c);
     }
 
     /**
@@ -55,7 +72,7 @@ public class MainFragment extends ListFragment {
      */
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
-        public void onItemSelected(String id) {
+        public void onItemSelected(Coffeeshop c) {
         }
     };
 
@@ -70,12 +87,17 @@ public class MainFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO: replace with a real list adapter.
-        setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(
-                getActivity(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                DummyContent.ITEMS));
+        list = new ArrayList<>();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        adapter = new CoffeeshopAdapter(getContext(), list);
+        setListAdapter(adapter);
+
+        fetchCoffeeShops("-33.814620,151.106089");
+
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
@@ -115,7 +137,7 @@ public class MainFragment extends ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
+        mCallbacks.onItemSelected(list.get(position));
     }
 
     @Override
@@ -147,5 +169,76 @@ public class MainFragment extends ListFragment {
         }
 
         mActivatedPosition = position;
+    }
+
+    private void fetchCoffeeShops(final String lonLng) {
+        JsonObjectRequest request = new JsonObjectRequest(URL + "ll=" + lonLng, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONObject resp = response.getJSONObject("response");
+                    JSONArray venues = resp.getJSONArray("venues");
+                    for (int i = 0; i < venues.length(); i++) {
+                        Coffeeshop c = new Coffeeshop();
+                        JSONObject item = venues.getJSONObject(i);
+
+                        c.setName(item.getString("name"));
+
+                        if (item.has("contact")) {
+                            JSONObject contact = item.getJSONObject("contact");
+
+                            if (contact.has("phone")) {
+                                c.setPhone(contact.getString("phone"));
+                            }
+
+                            if (contact.has("formattedPhone")) {
+                                c.setFormattedPhone(contact.getString("formattedPhone"));
+                            }
+                        }
+
+                        JSONObject location = item.getJSONObject("location");
+                        c.setLat(location.getString("lat"));
+                        c.setLng(location.getString("lng"));
+                        c.setDistance(location.getInt("distance"));
+                        if (location.has("city")) {
+                            c.setCity(location.getString("city"));
+                        }
+                        JSONArray address = location.getJSONArray("formattedAddress");
+                        StringBuilder formattedAddress = new StringBuilder();
+                        for (int j = 0; j < address.length(); j++) {
+                            formattedAddress.append(address.getString(j));
+                            if (j != address.length() - 1)
+                            formattedAddress.append(", ");
+                        }
+                        c.setFormattedAddress(formattedAddress.toString());
+
+                        JSONArray category = item.getJSONArray("categories");
+                        c.setCategory(category.getJSONObject(0).getString("name"));
+
+                        JSONObject stats = item.getJSONObject("stats");
+                        c.setCheckinsCount(stats.getInt("checkinsCount"));
+                        c.setUsersCount(stats.getInt("usersCount"));
+                        c.setTipCount(stats.getInt("tipCount"));
+
+                        list.add(c);
+                    }
+
+                    Collections.sort(list);
+                    adapter.updateResults(list);
+
+                } catch (JSONException e) {
+                    Log.e("JSONException", e.toString());
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("VolleyError", error.toString());
+            }
+        });
+
+        // Add request to the queue
+        AppController.getInstance().getRequestQueue().add(request);
     }
 }

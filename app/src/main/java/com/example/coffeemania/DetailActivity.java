@@ -38,8 +38,18 @@ public class DetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(DetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(DetailFragment.ARG_ITEM_ID));
+            arguments.putString(DetailFragment.COFFEESHOP_NAME, getIntent().getStringExtra(DetailFragment.COFFEESHOP_NAME));
+            arguments.putString(DetailFragment.COFFEESHOP_LOCATION_LAT, getIntent().getStringExtra(DetailFragment.COFFEESHOP_LOCATION_LAT));
+            arguments.putString(DetailFragment.COFFEESHOP_LOCATION_LNG, getIntent().getStringExtra(DetailFragment.COFFEESHOP_LOCATION_LNG));
+            arguments.putInt(DetailFragment.COFFEESHOP_DISTANCE, getIntent().getIntExtra(DetailFragment.COFFEESHOP_DISTANCE, 0));
+            arguments.putString(DetailFragment.COFFEESHOP_CITY, getIntent().getStringExtra(DetailFragment.COFFEESHOP_CITY));
+            arguments.putString(DetailFragment.COFFEESHOP_ADDRESS, getIntent().getStringExtra(DetailFragment.COFFEESHOP_ADDRESS));
+            arguments.putString(DetailFragment.COFFEESHOP_CATEGORY, getIntent().getStringExtra(DetailFragment.COFFEESHOP_CATEGORY));
+            arguments.putInt(DetailFragment.COFFEESHOP_CHECKINS, getIntent().getIntExtra(DetailFragment.COFFEESHOP_CHECKINS, 0));
+            arguments.putInt(DetailFragment.COFFEESHOP_USERS, getIntent().getIntExtra(DetailFragment.COFFEESHOP_USERS, 0));
+            arguments.putInt(DetailFragment.COFFEESHOP_TIP, getIntent().getIntExtra(DetailFragment.COFFEESHOP_TIP, 0));
+            arguments.putString(DetailFragment.COFFEESHOP_PHONE, getIntent().getStringExtra(DetailFragment.COFFEESHOP_PHONE));
+            arguments.putString(DetailFragment.COFFEESHOP_FORMATTED_PHONE, getIntent().getStringExtra(DetailFragment.COFFEESHOP_FORMATTED_PHONE));
             DetailFragment fragment = new DetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

@@ -1,4 +1,4 @@
-package com.example.coffeemania;
+package com.example.coffeemania.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -6,6 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.coffeemania.activity.DetailActivity;
+import com.example.coffeemania.activity.MainActivity;
+import com.example.coffeemania.R;
 
 /**
  * A fragment representing a single Item detail screen.
@@ -34,7 +38,7 @@ public class DetailFragment extends Fragment {
     private String coffeeShopName;
     private String coffeeShopLocationLat;
     private String coffeeShopLocationLng;
-    private String coffeeShopDistance;
+    private int coffeeShopDistance;
     private String coffeeShopCity;
     private String coffeeShopAddress;
     private String coffeeShopCategory;
@@ -59,7 +63,7 @@ public class DetailFragment extends Fragment {
             coffeeShopName = getArguments().getString(COFFEESHOP_NAME);
             coffeeShopLocationLat = getArguments().getString(COFFEESHOP_LOCATION_LAT);
             coffeeShopLocationLng = getArguments().getString(COFFEESHOP_LOCATION_LNG);
-            coffeeShopDistance = getArguments().getString(COFFEESHOP_DISTANCE);
+            coffeeShopDistance = getArguments().getInt(COFFEESHOP_DISTANCE, 0);
             coffeeShopCity = getArguments().getString(COFFEESHOP_CITY);
             coffeeShopAddress = getArguments().getString(COFFEESHOP_ADDRESS);
             coffeeShopCategory = getArguments().getString(COFFEESHOP_CATEGORY);

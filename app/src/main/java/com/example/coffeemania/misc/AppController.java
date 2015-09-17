@@ -1,4 +1,4 @@
-package com.example.coffeemania;
+package com.example.coffeemania.misc;
 
 import android.app.Application;
 

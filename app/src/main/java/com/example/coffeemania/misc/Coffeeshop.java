@@ -1,4 +1,4 @@
-package com.example.coffeemania;
+package com.example.coffeemania.misc;
 
 public class Coffeeshop implements Comparable<Coffeeshop> {
     private String name;

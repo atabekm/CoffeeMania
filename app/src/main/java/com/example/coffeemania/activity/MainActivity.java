@@ -1,9 +1,13 @@
-package com.example.coffeemania;
+package com.example.coffeemania.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
+
+import com.example.coffeemania.misc.Coffeeshop;
+import com.example.coffeemania.R;
+import com.example.coffeemania.fragment.DetailFragment;
+import com.example.coffeemania.fragment.MainFragment;
 
 
 /**

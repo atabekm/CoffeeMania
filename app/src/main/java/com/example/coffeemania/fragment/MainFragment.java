@@ -1,6 +1,7 @@
-package com.example.coffeemania;
+package com.example.coffeemania.fragment;
 
 import android.content.Context;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -12,6 +13,15 @@ import android.widget.ListView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.coffeemania.misc.AppController;
+import com.example.coffeemania.misc.Coffeeshop;
+import com.example.coffeemania.adapter.CoffeeshopAdapter;
+import com.example.coffeemania.misc.Constants;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,18 +40,11 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class MainFragment extends ListFragment {
+public class MainFragment extends ListFragment implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
-    /**
-     * The serialization (saved instance state) Bundle key representing the
-     * activated item position. Only used on tablets.
-     */
+    private String TAG = MainFragment.class.getName();
     private static final String STATE_ACTIVATED_POSITION = "activated_position";
-
-    /**
-     * The fragment's current callback object, which is notified of list item
-     * clicks.
-     */
     private Callbacks mCallbacks = sDummyCallbacks;
 
     // The current activated item position. Only used on tablets.
@@ -49,10 +52,10 @@ public class MainFragment extends ListFragment {
 
     // List of Coffeeshop items
     private List<Coffeeshop> list;
-
     private CoffeeshopAdapter adapter;
 
-    private final String URL = "https://api.foursquare.com/v2/venues/search?client_id=ACAO2JPKM1MXHQJCK45IIFKRFR2ZVL0QASMCBCG5NPJQWF2G&client_secret=YZCKUYJ1WHUV2QICBXUBEILZI1DMPUIDP5SHV043O04FKBHL&v=20140806&m=swarm&query=coffee&";
+    protected GoogleApiClient googleApiClient;
+    protected LocationRequest mLocationRequest;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -60,26 +63,15 @@ public class MainFragment extends ListFragment {
      * selections.
      */
     public interface Callbacks {
-        /**
-         * Callback for when an item has been selected.
-         */
         public void onItemSelected(Coffeeshop c);
     }
 
-    /**
-     * A dummy implementation of the {@link Callbacks} interface that does
-     * nothing. Used only when this fragment is not attached to an activity.
-     */
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
         public void onItemSelected(Coffeeshop c) {
         }
     };
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public MainFragment() {
     }
 
@@ -87,15 +79,15 @@ public class MainFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        list = new ArrayList<>();
+        buildGoogleApiClient();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        adapter = new CoffeeshopAdapter(getContext(), list);
+        adapter = new CoffeeshopAdapter(getContext(), new ArrayList<Coffeeshop>());
         setListAdapter(adapter);
 
-        fetchCoffeeShops("-33.814620,151.106089");
+        //fetchCoffeeShops("-33.814620,151.106089");
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }
@@ -172,10 +164,12 @@ public class MainFragment extends ListFragment {
     }
 
     private void fetchCoffeeShops(final String lonLng) {
-        JsonObjectRequest request = new JsonObjectRequest(URL + "ll=" + lonLng, new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Constants.URL + "&ll=" + lonLng, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
+                    list = new ArrayList<>();
+
                     JSONObject resp = response.getJSONObject("response");
                     JSONArray venues = resp.getJSONArray("venues");
                     for (int i = 0; i < venues.length(); i++) {
@@ -240,5 +234,89 @@ public class MainFragment extends ListFragment {
 
         // Add request to the queue
         AppController.getInstance().getRequestQueue().add(request);
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        googleApiClient = new GoogleApiClient.Builder(getContext())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+
+        createLocationRequest();
+    }
+
+    protected void createLocationRequest() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(Constants.UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setFastestInterval(Constants.FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Log.e(TAG, "onConnected");
+        startLocationUpdates();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.e(TAG, "onConnectionSuspended");
+        googleApiClient.connect();
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.e(TAG, "onConnectionFailed");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        googleApiClient.connect();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (googleApiClient.isConnected()) {
+            startLocationUpdates();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if (googleApiClient.isConnected()) {
+            stopLocationUpdates();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        googleApiClient.disconnect();
+    }
+
+    // Callback that triggers on location change
+    @Override
+    public void onLocationChanged(Location location) {
+        Log.e(TAG, "onLocationChanged");
+        double lat = location.getLatitude();
+        double lng = location.getLongitude();
+
+        fetchCoffeeShops(lat + "," + lng);
+    }
+
+    private void startLocationUpdates() {
+        Log.e(TAG, "startLocationUpdates");
+        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, mLocationRequest, this);
+    }
+
+    private void stopLocationUpdates() {
+        Log.e(TAG, "stopLocationUpdates");
+        LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
     }
 }

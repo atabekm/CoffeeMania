@@ -9,7 +9,6 @@ import com.example.coffeemania.R;
 import com.example.coffeemania.fragment.DetailFragment;
 import com.example.coffeemania.fragment.MainFragment;
 
-
 /**
  * An activity representing a list of Items. This activity
  * has different presentations for handset and tablet-size devices. On
@@ -52,8 +51,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
                     .findFragmentById(R.id.item_list))
                     .setActivateOnItemClick(true);
         }
-
-        // TODO: If exposing deep links into your app, handle intents here.
     }
 
     /**

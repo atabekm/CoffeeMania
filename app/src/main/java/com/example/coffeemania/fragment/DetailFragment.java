@@ -14,6 +14,14 @@ import android.widget.Toast;
 import com.example.coffeemania.activity.DetailActivity;
 import com.example.coffeemania.activity.MainActivity;
 import com.example.coffeemania.R;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * A fragment representing a single Item detail screen.
@@ -54,6 +62,9 @@ public class DetailFragment extends Fragment {
     private String coffeeShopFormattedPhone;
     private String coffeeShopUrl;
 
+    private MapView mapView;
+    private GoogleMap googleMap;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -87,7 +98,6 @@ public class DetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
-        // Show the dummy content as text in a TextView.
         if (coffeeShopName != null) {
             ((TextView) rootView.findViewById(R.id.detail_name)).setText(coffeeShopName);
             ((TextView) rootView.findViewById(R.id.detail_category)).setText(coffeeShopCategory);
@@ -179,7 +189,48 @@ public class DetailFragment extends Fragment {
             }
         });
 
+        mapView = (MapView) rootView.findViewById(R.id.map);
+        mapView.onCreate(savedInstanceState);
+        googleMap = mapView.getMap();
+        googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+
+        try {
+            MapsInitializer.initialize(getContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Updates the location and zoom of the MapView
+        LatLng location = new LatLng(Double.parseDouble(coffeeShopLocationLat), Double.parseDouble(coffeeShopLocationLng));
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(location, 15);
+        googleMap.moveCamera(cameraUpdate);
+        googleMap.addMarker(new MarkerOptions().position(location).title(coffeeShopName));
+
         return rootView;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
     }
 
     private void showToast(String message) {

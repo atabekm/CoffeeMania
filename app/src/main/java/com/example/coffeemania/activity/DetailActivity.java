@@ -53,6 +53,7 @@ public class DetailActivity extends AppCompatActivity {
             arguments.putInt(DetailFragment.COFFEESHOP_TIP, getIntent().getIntExtra(DetailFragment.COFFEESHOP_TIP, 0));
             arguments.putString(DetailFragment.COFFEESHOP_PHONE, getIntent().getStringExtra(DetailFragment.COFFEESHOP_PHONE));
             arguments.putString(DetailFragment.COFFEESHOP_FORMATTED_PHONE, getIntent().getStringExtra(DetailFragment.COFFEESHOP_FORMATTED_PHONE));
+            arguments.putString(DetailFragment.COFFEESHOP_URL, getIntent().getStringExtra(DetailFragment.COFFEESHOP_URL));
             DetailFragment fragment = new DetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

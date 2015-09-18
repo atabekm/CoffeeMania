@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
             arguments.putInt(DetailFragment.COFFEESHOP_TIP, c.getTipCount());
             arguments.putString(DetailFragment.COFFEESHOP_PHONE, c.getPhone());
             arguments.putString(DetailFragment.COFFEESHOP_FORMATTED_PHONE, c.getFormattedPhone());
+            arguments.putString(DetailFragment.COFFEESHOP_URL, c.getUrl());
 
             DetailFragment fragment = new DetailFragment();
             fragment.setArguments(arguments);
@@ -102,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
             detailIntent.putExtra(DetailFragment.COFFEESHOP_TIP, c.getTipCount());
             detailIntent.putExtra(DetailFragment.COFFEESHOP_PHONE, c.getPhone());
             detailIntent.putExtra(DetailFragment.COFFEESHOP_FORMATTED_PHONE, c.getFormattedPhone());
+            detailIntent.putExtra(DetailFragment.COFFEESHOP_URL, c.getUrl());
             startActivity(detailIntent);
         }
     }

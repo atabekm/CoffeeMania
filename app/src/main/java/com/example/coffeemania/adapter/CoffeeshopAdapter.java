@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.coffeemania.misc.Coffeeshop;
 import com.example.coffeemania.R;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class CoffeeshopAdapter extends BaseAdapter {
@@ -47,8 +48,7 @@ public class CoffeeshopAdapter extends BaseAdapter {
 
             viewHolder = new ViewHolder();
             viewHolder.tvName = (TextView) view.findViewById(R.id.item_name);
-            viewHolder.tvDistance = (TextView) view.findViewById(R.id.item_distance);
-            viewHolder.tvAddress = (TextView) view.findViewById(R.id.item_address);
+            viewHolder.tvDistanceAddress = (TextView) view.findViewById(R.id.item_distance_address);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
@@ -57,15 +57,19 @@ public class CoffeeshopAdapter extends BaseAdapter {
         Coffeeshop item = mList.get(position);
         if (item != null) {
             if (viewHolder.tvName != null) {
-                viewHolder.tvName.setText(position + 1 + ". " + item.getName());
+                viewHolder.tvName.setText(item.getName());
             }
 
-            if (viewHolder.tvDistance != null) {
-                viewHolder.tvDistance.setText(String.valueOf(item.getDistance()));
+            String distance = "";
+            if (item.getDistance() < 1000) {
+                distance = item.getDistance() + "m";
+            } else {
+                DecimalFormat decimalFormat = new DecimalFormat("#.#");
+                distance = decimalFormat.format(item.getDistance() / 1000d) + "km";
             }
 
-            if (viewHolder.tvAddress != null) {
-                viewHolder.tvAddress.setText(item.getFormattedAddress());
+            if (viewHolder.tvDistanceAddress != null) {
+                viewHolder.tvDistanceAddress.setText(distance + "   -   " + item.getFormattedAddress());
             }
         }
 
@@ -79,7 +83,6 @@ public class CoffeeshopAdapter extends BaseAdapter {
 
     private static class ViewHolder {
         protected TextView tvName;
-        protected TextView tvDistance;
-        protected TextView tvAddress;
+        protected TextView tvDistanceAddress;
     }
 }

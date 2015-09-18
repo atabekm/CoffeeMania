@@ -87,7 +87,8 @@ public class MainFragment extends ListFragment implements GoogleApiClient.Connec
         adapter = new CoffeeshopAdapter(getContext(), new ArrayList<Coffeeshop>());
         setListAdapter(adapter);
 
-        //fetchCoffeeShops("-33.814620,151.106089");
+
+        //getListView().setEmptyView();
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }
@@ -188,6 +189,10 @@ public class MainFragment extends ListFragment implements GoogleApiClient.Connec
                             if (contact.has("formattedPhone")) {
                                 c.setFormattedPhone(contact.getString("formattedPhone"));
                             }
+                        }
+
+                        if (item.has("url")) {
+                            c.setUrl(item.getString("url"));
                         }
 
                         JSONObject location = item.getJSONObject("location");

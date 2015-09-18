@@ -13,6 +13,7 @@ public class Coffeeshop implements Comparable<Coffeeshop> {
     private int tipCount;
     private String phone;
     private String formattedPhone;
+    private String url;
 
     public String getName() {
         return name;
@@ -108,6 +109,14 @@ public class Coffeeshop implements Comparable<Coffeeshop> {
 
     public void setFormattedPhone(String formattedPhone) {
         this.formattedPhone = formattedPhone;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     @Override

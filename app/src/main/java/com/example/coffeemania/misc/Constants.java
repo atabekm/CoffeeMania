@@ -1,7 +1,7 @@
 package com.example.coffeemania.misc;
 
 public class Constants {
-    public static final int UPDATE_INTERVAL_IN_MILLISECONDS = 5 * 60 * 1000;
+    public static final int UPDATE_INTERVAL_IN_MILLISECONDS = 1 * 60 * 1000;
     public static final int FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 2;
 
     private static final String URL_BASE = "https://api.foursquare.com/v2/venues/search?";

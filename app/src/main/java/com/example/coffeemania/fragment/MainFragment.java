@@ -13,6 +13,7 @@ import android.widget.ListView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.coffeemania.R;
 import com.example.coffeemania.misc.AppController;
 import com.example.coffeemania.misc.Coffeeshop;
 import com.example.coffeemania.adapter.CoffeeshopAdapter;
@@ -87,9 +88,6 @@ public class MainFragment extends ListFragment implements GoogleApiClient.Connec
         adapter = new CoffeeshopAdapter(getContext(), new ArrayList<Coffeeshop>());
         setListAdapter(adapter);
 
-
-        //getListView().setEmptyView();
-
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -102,6 +100,10 @@ public class MainFragment extends ListFragment implements GoogleApiClient.Connec
                 && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
             setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
         }
+
+        View emptyView = getActivity().getLayoutInflater().inflate(R.layout.progress_item, null);
+        ((ViewGroup)getListView().getParent()).addView(emptyView);
+        getListView().setEmptyView(emptyView);
     }
 
     @Override

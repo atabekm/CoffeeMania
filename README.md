@@ -110,3 +110,13 @@ click **Clone**
 3. On Project window on the top left, expand the directories, and find `UITest` class
 4. Tap with two fingers on `UITest` (right click on PC)
 5. From opened context menu, select `Run 'UITest'`
+
+## Screenshots
+### Phone
+
+![device-2015-09-20-161025](https://cloud.githubusercontent.com/assets/8268042/9980049/6745beb2-5fcd-11e5-9dd9-a9197de023be.jpg)
+![phone2](https://cloud.githubusercontent.com/assets/8268042/9980050/70a6c7c6-5fcd-11e5-979b-f5217f8e1baf.jpg)
+
+### Tablet
+
+![device-2015-09-20-160832](https://cloud.githubusercontent.com/assets/8268042/9980048/674419fe-5fcd-11e5-9d1c-1af2cba6f514.jpg)

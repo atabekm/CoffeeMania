@@ -5,7 +5,6 @@ public class Coffeeshop implements Comparable<Coffeeshop> {
     private String lat;
     private String lng;
     private int distance;
-    private String city;
     private String formattedAddress;
     private String category;
     private int checkinsCount;
@@ -45,14 +44,6 @@ public class Coffeeshop implements Comparable<Coffeeshop> {
 
     public void setDistance(int distance) {
         this.distance = distance;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
     }
 
     public String getFormattedAddress() {

@@ -45,7 +45,6 @@ public class DetailActivity extends AppCompatActivity {
             arguments.putString(DetailFragment.COFFEESHOP_LOCATION_LAT, getIntent().getStringExtra(DetailFragment.COFFEESHOP_LOCATION_LAT));
             arguments.putString(DetailFragment.COFFEESHOP_LOCATION_LNG, getIntent().getStringExtra(DetailFragment.COFFEESHOP_LOCATION_LNG));
             arguments.putInt(DetailFragment.COFFEESHOP_DISTANCE, getIntent().getIntExtra(DetailFragment.COFFEESHOP_DISTANCE, 0));
-            arguments.putString(DetailFragment.COFFEESHOP_CITY, getIntent().getStringExtra(DetailFragment.COFFEESHOP_CITY));
             arguments.putString(DetailFragment.COFFEESHOP_ADDRESS, getIntent().getStringExtra(DetailFragment.COFFEESHOP_ADDRESS));
             arguments.putString(DetailFragment.COFFEESHOP_CATEGORY, getIntent().getStringExtra(DetailFragment.COFFEESHOP_CATEGORY));
             arguments.putInt(DetailFragment.COFFEESHOP_CHECKINS, getIntent().getIntExtra(DetailFragment.COFFEESHOP_CHECKINS, 0));

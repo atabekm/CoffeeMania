@@ -38,7 +38,6 @@ public class DetailFragment extends Fragment {
     public static final String COFFEESHOP_LOCATION_LAT = "coffeeshop_location_lat";
     public static final String COFFEESHOP_LOCATION_LNG = "coffeeshop_location_lng";
     public static final String COFFEESHOP_DISTANCE = "coffeeshop_distance";
-    public static final String COFFEESHOP_CITY = "coffeeshop_city";
     public static final String COFFEESHOP_ADDRESS = "coffeeshop_address";
     public static final String COFFEESHOP_CATEGORY = "coffeeshop_category";
     public static final String COFFEESHOP_CHECKINS = "coffeeshop_checkins";
@@ -52,7 +51,6 @@ public class DetailFragment extends Fragment {
     private String coffeeShopLocationLat;
     private String coffeeShopLocationLng;
     private int coffeeShopDistance;
-    private String coffeeShopCity;
     private String coffeeShopAddress;
     private String coffeeShopCategory;
     private int coffeeShopCheckins;
@@ -63,7 +61,6 @@ public class DetailFragment extends Fragment {
     private String coffeeShopUrl;
 
     private MapView mapView;
-    private GoogleMap googleMap;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -81,7 +78,6 @@ public class DetailFragment extends Fragment {
             coffeeShopLocationLat = getArguments().getString(COFFEESHOP_LOCATION_LAT);
             coffeeShopLocationLng = getArguments().getString(COFFEESHOP_LOCATION_LNG);
             coffeeShopDistance = getArguments().getInt(COFFEESHOP_DISTANCE, 0);
-            coffeeShopCity = getArguments().getString(COFFEESHOP_CITY);
             coffeeShopAddress = getArguments().getString(COFFEESHOP_ADDRESS);
             coffeeShopCategory = getArguments().getString(COFFEESHOP_CATEGORY);
             coffeeShopCheckins = getArguments().getInt(COFFEESHOP_CHECKINS, 0);
@@ -191,7 +187,7 @@ public class DetailFragment extends Fragment {
 
         mapView = (MapView) rootView.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
-        googleMap = mapView.getMap();
+        GoogleMap googleMap = mapView.getMap();
         googleMap.getUiSettings().setMyLocationButtonEnabled(false);
 
         try {

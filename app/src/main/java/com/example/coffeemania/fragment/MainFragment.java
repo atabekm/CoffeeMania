@@ -201,9 +201,7 @@ public class MainFragment extends ListFragment implements GoogleApiClient.Connec
                         c.setLat(location.getString("lat"));
                         c.setLng(location.getString("lng"));
                         c.setDistance(location.getInt("distance"));
-                        if (location.has("city")) {
-                            c.setCity(location.getString("city"));
-                        }
+
                         JSONArray address = location.getJSONArray("formattedAddress");
                         StringBuilder formattedAddress = new StringBuilder();
                         for (int j = 0; j < address.length(); j++) {

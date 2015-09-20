@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
             arguments.putString(DetailFragment.COFFEESHOP_LOCATION_LAT, c.getLat());
             arguments.putString(DetailFragment.COFFEESHOP_LOCATION_LNG, c.getLng());
             arguments.putInt(DetailFragment.COFFEESHOP_DISTANCE, c.getDistance());
-            arguments.putString(DetailFragment.COFFEESHOP_CITY, c.getCity());
             arguments.putString(DetailFragment.COFFEESHOP_ADDRESS, c.getFormattedAddress());
             arguments.putString(DetailFragment.COFFEESHOP_CATEGORY, c.getCategory());
             arguments.putInt(DetailFragment.COFFEESHOP_CHECKINS, c.getCheckinsCount());
@@ -92,7 +91,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
             detailIntent.putExtra(DetailFragment.COFFEESHOP_LOCATION_LAT, c.getLat());
             detailIntent.putExtra(DetailFragment.COFFEESHOP_LOCATION_LNG, c.getLng());
             detailIntent.putExtra(DetailFragment.COFFEESHOP_DISTANCE, c.getDistance());
-            detailIntent.putExtra(DetailFragment.COFFEESHOP_CITY, c.getCity());
             detailIntent.putExtra(DetailFragment.COFFEESHOP_ADDRESS, c.getFormattedAddress());
             detailIntent.putExtra(DetailFragment.COFFEESHOP_CATEGORY, c.getCategory());
             detailIntent.putExtra(DetailFragment.COFFEESHOP_CHECKINS, c.getCheckinsCount());

@@ -205,7 +205,8 @@
         <com.google.android.gms.maps.MapView
             android:id="@+id/map"
             android:layout_width="match_parent"
-            android:layout_height="250dp" />
+            android:layout_height="@dimen/map_height"
+            android:layout_marginLeft="@dimen/map_margin_left" />
 
     </LinearLayout>
 

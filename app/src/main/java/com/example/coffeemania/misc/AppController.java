@@ -6,6 +6,9 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
+/**
+ * A singleton class to handle multiple Volley request
+ */
 public class AppController extends Application {
     private RequestQueue mRequestQueue;
     private static AppController mInstance;

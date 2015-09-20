@@ -30,10 +30,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * on handsets.
  */
 public class DetailFragment extends Fragment {
-    /**
-     * The fragment argument representing the item ID that this fragment
-     * represents.
-     */
+    // Constants to hold fragment argument keys.
     public static final String COFFEESHOP_NAME = "coffeeshop_name";
     public static final String COFFEESHOP_LOCATION_LAT = "coffeeshop_location_lat";
     public static final String COFFEESHOP_LOCATION_LNG = "coffeeshop_location_lng";
@@ -50,7 +47,6 @@ public class DetailFragment extends Fragment {
     private String coffeeShopName;
     private String coffeeShopLocationLat;
     private String coffeeShopLocationLng;
-    private int coffeeShopDistance;
     private String coffeeShopAddress;
     private String coffeeShopCategory;
     private int coffeeShopCheckins;
@@ -73,11 +69,11 @@ public class DetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Get and save data passed from DetailActivity or MainActivity.
         if (getArguments().containsKey(COFFEESHOP_NAME)) {
             coffeeShopName = getArguments().getString(COFFEESHOP_NAME);
             coffeeShopLocationLat = getArguments().getString(COFFEESHOP_LOCATION_LAT);
             coffeeShopLocationLng = getArguments().getString(COFFEESHOP_LOCATION_LNG);
-            coffeeShopDistance = getArguments().getInt(COFFEESHOP_DISTANCE, 0);
             coffeeShopAddress = getArguments().getString(COFFEESHOP_ADDRESS);
             coffeeShopCategory = getArguments().getString(COFFEESHOP_CATEGORY);
             coffeeShopCheckins = getArguments().getInt(COFFEESHOP_CHECKINS, 0);
@@ -94,6 +90,7 @@ public class DetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
+        // If coffeeshop name is passed and not null, set all related data to appropriate views.
         if (coffeeShopName != null) {
             ((TextView) rootView.findViewById(R.id.detail_name)).setText(coffeeShopName);
             ((TextView) rootView.findViewById(R.id.detail_category)).setText(coffeeShopCategory);
@@ -103,6 +100,21 @@ public class DetailFragment extends Fragment {
             ((TextView) rootView.findViewById(R.id.detail_tip)).setText(String.valueOf(coffeeShopTip));
         }
 
+        // Make address data clickable, and when clicked it is opened by Maps application.
+        rootView.findViewById(R.id.detail_group_address).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                String location = coffeeShopLocationLat + "," + coffeeShopLocationLng;
+                String label = Uri.encode(coffeeShopName);
+                intent.setData(Uri.parse("geo:0,0?q=" + location + "(" + label + ")"));
+                startActivity(intent);
+            }
+        });
+
+        // Not all coffeeshops have phone numbers, if they have we make it visible (by default, it
+        // is hidden in the layout), set its number, and make it clickable (i.e. when clicked, the
+        // number will be passed to Dialer app).
         if (coffeeShopPhone != null) {
             ((TextView) rootView.findViewById(R.id.detail_phone)).setText(coffeeShopFormattedPhone);
             rootView.findViewById(R.id.detail_group_phone).setVisibility(View.VISIBLE);
@@ -116,17 +128,9 @@ public class DetailFragment extends Fragment {
             });
         }
 
-        rootView.findViewById(R.id.detail_group_address).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                String location = coffeeShopLocationLat + "," + coffeeShopLocationLng;
-                String label = Uri.encode(coffeeShopName);
-                intent.setData(Uri.parse("geo:0,0?q=" + location + "(" + label + ")"));
-                startActivity(intent);
-            }
-        });
-
+        // Not all coffeeshops have web-site, if they have we make it visible (by default, it
+        // is hidden in the layout), set its URL, and make it clickable (i.e. when clicked, the
+        // URL will be passed to browser app).
         if (coffeeShopUrl != null) {
             ((TextView) rootView.findViewById(R.id.detail_url)).setText(coffeeShopUrl);
             rootView.findViewById(R.id.detail_group_url).setVisibility(View.VISIBLE);
@@ -140,6 +144,7 @@ public class DetailFragment extends Fragment {
             });
         }
 
+        // If the venue has number of checked ins, we show it via Toast upon clicking.
         rootView.findViewById(R.id.detail_group_checkins).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -155,6 +160,7 @@ public class DetailFragment extends Fragment {
             }
         });
 
+        // If the venue has number of checked in users, we show it via Toast upon clicking.
         rootView.findViewById(R.id.detail_group_users).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -170,6 +176,7 @@ public class DetailFragment extends Fragment {
             }
         });
 
+        // If the venue has any info about tips, we show it via Toast upon clicking.
         rootView.findViewById(R.id.detail_group_tip).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -185,19 +192,20 @@ public class DetailFragment extends Fragment {
             }
         });
 
+        // Initialize MapView and GoogleMap.
         mapView = (MapView) rootView.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
         GoogleMap googleMap = mapView.getMap();
         googleMap.getUiSettings().setMyLocationButtonEnabled(false);
-
         try {
             MapsInitializer.initialize(getContext());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        // Updates the location and zoom of the MapView
-        LatLng location = new LatLng(Double.parseDouble(coffeeShopLocationLat), Double.parseDouble(coffeeShopLocationLng));
+        // Get new location and zoom, and pass it to GoogleMap.
+        LatLng location = new LatLng(Double.parseDouble(coffeeShopLocationLat),
+                Double.parseDouble(coffeeShopLocationLng));
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(location, 15);
         googleMap.moveCamera(cameraUpdate);
         googleMap.addMarker(new MarkerOptions().position(location).title(coffeeShopName));
@@ -206,29 +214,34 @@ public class DetailFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mapView.onDestroy();
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
+        // Handle onResume of MapView.
         mapView.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        // Handle onPause of MapView.
         mapView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Handle onDestroy of MapView.
+        mapView.onDestroy();
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
+        // On low memory, take appropriate actions for MapView.
         mapView.onLowMemory();
     }
 
+    // Helper method to show Toast message.
     private void showToast(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }

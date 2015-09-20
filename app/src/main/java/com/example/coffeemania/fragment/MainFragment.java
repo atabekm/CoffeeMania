@@ -80,11 +80,13 @@ public class MainFragment extends ListFragment implements GoogleApiClient.Connec
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Google API client should be built on during creation.
         buildGoogleApiClient();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Initialize adapter and set it to ListView.
         adapter = new CoffeeshopAdapter(getContext(), new ArrayList<Coffeeshop>());
         setListAdapter(adapter);
 
@@ -101,6 +103,7 @@ public class MainFragment extends ListFragment implements GoogleApiClient.Connec
             setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
         }
 
+        // Set empty view to ListView.
         View emptyView = getActivity().getLayoutInflater().inflate(R.layout.progress_item, null);
         ((ViewGroup)getListView().getParent()).addView(emptyView);
         getListView().setEmptyView(emptyView);
@@ -166,15 +169,18 @@ public class MainFragment extends ListFragment implements GoogleApiClient.Connec
         mActivatedPosition = position;
     }
 
+    // A method to make a HTTP request to API, and get JSON response.
     private void fetchCoffeeShops(final String lonLng) {
         JsonObjectRequest request = new JsonObjectRequest(Constants.URL + "&ll=" + lonLng, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
+                    // Initialize List
                     list = new ArrayList<>();
 
                     JSONObject resp = response.getJSONObject("response");
                     JSONArray venues = resp.getJSONArray("venues");
+                    // Loop venues array, and save its data in List.
                     for (int i = 0; i < venues.length(); i++) {
                         Coffeeshop c = new Coffeeshop();
                         JSONObject item = venues.getJSONObject(i);
@@ -222,6 +228,7 @@ public class MainFragment extends ListFragment implements GoogleApiClient.Connec
                         list.add(c);
                     }
 
+                    // Sort the list by distance, and update the Adapter.
                     Collections.sort(list);
                     adapter.updateResults(list);
 
@@ -251,6 +258,7 @@ public class MainFragment extends ListFragment implements GoogleApiClient.Connec
         createLocationRequest();
     }
 
+    // A method to create LocationRequest, and set its intervals nad priority
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(Constants.UPDATE_INTERVAL_IN_MILLISECONDS);
@@ -305,13 +313,14 @@ public class MainFragment extends ListFragment implements GoogleApiClient.Connec
         googleApiClient.disconnect();
     }
 
-    // Callback that triggers on location change
+    // Callback that triggers on location change.
     @Override
     public void onLocationChanged(Location location) {
         Log.e(TAG, "onLocationChanged");
         double lat = location.getLatitude();
         double lng = location.getLongitude();
 
+        // On location change, update the list and adapter.
         fetchCoffeeShops(lat + "," + lng);
     }
 

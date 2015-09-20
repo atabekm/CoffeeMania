@@ -38,8 +38,7 @@ public class DetailActivity extends AppCompatActivity {
         // http://developer.android.com/guide/components/fragments.html
         //
         if (savedInstanceState == null) {
-            // Create the detail fragment and add it to the activity
-            // using a fragment transaction.
+            // Get all data passed by Intent from MainActivity, then pass it to DetailFragment.
             Bundle arguments = new Bundle();
             arguments.putString(DetailFragment.COFFEESHOP_NAME, getIntent().getStringExtra(DetailFragment.COFFEESHOP_NAME));
             arguments.putString(DetailFragment.COFFEESHOP_LOCATION_LAT, getIntent().getStringExtra(DetailFragment.COFFEESHOP_LOCATION_LAT));
@@ -53,6 +52,9 @@ public class DetailActivity extends AppCompatActivity {
             arguments.putString(DetailFragment.COFFEESHOP_PHONE, getIntent().getStringExtra(DetailFragment.COFFEESHOP_PHONE));
             arguments.putString(DetailFragment.COFFEESHOP_FORMATTED_PHONE, getIntent().getStringExtra(DetailFragment.COFFEESHOP_FORMATTED_PHONE));
             arguments.putString(DetailFragment.COFFEESHOP_URL, getIntent().getStringExtra(DetailFragment.COFFEESHOP_URL));
+
+            // Create the detail fragment and add it to the activity
+            // using a fragment transaction.
             DetailFragment fragment = new DetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

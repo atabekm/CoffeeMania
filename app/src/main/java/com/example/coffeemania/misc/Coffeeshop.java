@@ -1,5 +1,8 @@
 package com.example.coffeemania.misc;
 
+/**
+ * A POJO class to represent Coffeeshop
+ */
 public class Coffeeshop implements Comparable<Coffeeshop> {
     private String name;
     private String lat;
@@ -110,6 +113,8 @@ public class Coffeeshop implements Comparable<Coffeeshop> {
         this.url = url;
     }
 
+    // Implements Comparable interface and its compareTo method, which will help to sort the
+    // list of Coffeeshop by its distance
     @Override
     public int compareTo(Coffeeshop another) {
         if (this.getDistance() < another.getDistance()) {

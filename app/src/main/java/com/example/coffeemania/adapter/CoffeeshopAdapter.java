@@ -14,10 +14,14 @@ import com.example.coffeemania.R;
 import java.text.DecimalFormat;
 import java.util.List;
 
+/**
+ * An adapter responsible for handling Coffeeshop data
+ */
 public class CoffeeshopAdapter extends BaseAdapter {
     List<Coffeeshop> mList;
     Context mContext;
 
+    // Context and Coffeeshop list are passed as arguments to the constructor.
     public CoffeeshopAdapter(Context context, List<Coffeeshop> list) {
         mContext = context;
         mList = list;
@@ -42,6 +46,7 @@ public class CoffeeshopAdapter extends BaseAdapter {
     public View getView(int position, View view, ViewGroup parent) {
         ViewHolder viewHolder;
 
+        // If the view was 'built' before retrieve it, else create new.
         if (view == null) {
             LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
             view = inflater.inflate(R.layout.list_item, parent, false);
@@ -60,7 +65,8 @@ public class CoffeeshopAdapter extends BaseAdapter {
                 viewHolder.tvName.setText(item.getName());
             }
 
-            String distance = "";
+            String distance;
+            // If distance is less than 1km, then show in metres, else in kilometres
             if (item.getDistance() < 1000) {
                 distance = item.getDistance() + "m";
             } else {
@@ -76,11 +82,13 @@ public class CoffeeshopAdapter extends BaseAdapter {
         return view;
     }
 
+    // A method to update adapter with new Coffeeshop list.
     public void updateResults(List<Coffeeshop> list) {
         mList = list;
         notifyDataSetChanged();
     }
 
+    // ViewHolder pattern implementation that holds two TextViews.
     private static class ViewHolder {
         protected TextView tvName;
         protected TextView tvDistanceAddress;

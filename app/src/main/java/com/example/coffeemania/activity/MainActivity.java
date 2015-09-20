@@ -60,9 +60,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
     @Override
     public void onItemSelected(Coffeeshop c) {
         if (mTwoPane) {
-            // In two-pane mode, show the detail view in this activity by
-            // adding or replacing the detail fragment using a
-            // fragment transaction.
+            // On list item selected, pass selected data to DetailFragment.
             Bundle arguments = new Bundle();
             arguments.putString(DetailFragment.COFFEESHOP_NAME, c.getName());
             arguments.putString(DetailFragment.COFFEESHOP_LOCATION_LAT, c.getLat());
@@ -77,6 +75,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
             arguments.putString(DetailFragment.COFFEESHOP_FORMATTED_PHONE, c.getFormattedPhone());
             arguments.putString(DetailFragment.COFFEESHOP_URL, c.getUrl());
 
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
             DetailFragment fragment = new DetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -86,6 +87,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
         } else {
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
+
+            // Add selected item data as an intent.
             Intent detailIntent = new Intent(this, DetailActivity.class);
             detailIntent.putExtra(DetailFragment.COFFEESHOP_NAME, c.getName());
             detailIntent.putExtra(DetailFragment.COFFEESHOP_LOCATION_LAT, c.getLat());

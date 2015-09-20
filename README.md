@@ -45,6 +45,10 @@ On following environment the app was developed:
 * Java: 1.6.0_65
 * Dependency management: Gradle 1.3.0
 
+### Used external libraries
+* `Google Volley` to communicate with APIs
+* `Robotium` to implement UI testing
+
 ## Assumptions made
 
 The following assumptions were made to develop the app:
